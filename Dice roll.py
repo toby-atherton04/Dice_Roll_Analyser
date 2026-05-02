@@ -60,3 +60,30 @@ class RollAnalyser:
         for total, freq in dist.items():
             bar = '*' * freq
             print(f"{total:2}: {bar} ({freq})")
+
+# TEST SCRIPT
+if __name__ == "__main__":
+    print('Running test script.\n')
+    
+    # 1. Basic Dice Setup
+    d4 = Dice(4)
+    d6 = Dice(6)
+    d6_unlucky = Dice([1,1,1,1,1,6])
+
+    # 2. Part 1 Tests
+    print('--- Part 1: Basic Dice Tests ---')
+    print(f'1d4: {d4.roll()}, 20d4: {d4.roll_n(20)}')
+    print(f'1d6 (unlucky): {d6_unlucky.roll()}\n')
+
+    print('--- Part 1: Complex DiceRoll Test (4d4 + 1d20 - 2) ---')
+    mixed_roll = DiceRoll([(d4, 4), (Dice(20), 1)], -2)
+    roll_result, raw_rolls = mixed_roll.roll()
+
+    # 1. Show the result of the Complex Roll
+    print(f'Result: {roll_result} (Raw rolls: {raw_rolls} with -2 modifier)\n')
+
+    # 2. Run the Part 2 Analysis
+    print('--- Part 2: Distribution Analysis (2d2 + 10) ---')
+    simple_roll = DiceRoll([(Dice(2), 2)], 10)
+    analyser = RollAnalyser(simple_roll)
+    analyser.print_histogram()
