@@ -36,11 +36,27 @@ class DiceRoll:
         for die, num in zip(self.dice, self.count):
             for _ in range(num):
                 all_die_options.append(die.face_labels)
-        
-        # itertools.product finds every possible combination of the faces
+                
         permutations = list(itertools.product(*all_die_options))
         
         results = []
         for p in permutations:
             results.append((sum(p) + self.modifier, list(p)))
         return results
+        
+class RollAnalyser:
+    def __init__(self, dice_roll):
+        self.outcomes = dice_roll.possible_outcomes()
+
+    def get_distribution(self):
+        dist = {}
+        for total, _ in self.outcomes:
+            dist[total] = dist.get(total, 0) + 1
+        return dict(sorted(dist.items()))
+
+    def print_histogram(self):
+        dist = self.get_distribution()
+        print("\n--- Roll Distribution Histogram ---")
+        for total, freq in dist.items():
+            bar = '*' * freq
+            print(f"{total:2}: {bar} ({freq})")
